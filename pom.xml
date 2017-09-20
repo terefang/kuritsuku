@@ -41,6 +41,7 @@
         <module>test</module>
         <module>adapter-simpleframework</module>
         <module>handler-jsonrpc</module>
+        <module>handler-xmlrpc</module>
     </modules>
 
 

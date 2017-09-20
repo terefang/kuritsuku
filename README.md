@@ -4,7 +4,7 @@ Japanese for *click*, Kuritsuku is a Web-Service-Framework inspired by Apache-Cl
 
 ## Features
 
-  * Class/Method Routing is speficied via Annotations.
+  * Class/Method Routing is specified via Annotations.
 
   * important Objects (Context, Parameter, Header, ...) can be Injected via Annotations.
 
@@ -22,7 +22,7 @@ Japanese for *click*, Kuritsuku is a Web-Service-Framework inspired by Apache-Cl
 
   * includes handler/helper for ease of implementing standardized webservices
     - json-rpc (via jsonrpc4j -- 1.0, 1.1, 2.0)
-    - xml-rpc2 aka Frontier RPC (currently not implemented)
-    - rest/json (currently not implemented)
-    - rest/xml (currently not implemented
-    - soap (currently not implemented)
+    - xmlrpc2 aka Frontier RPC (via Redstone XMLRPC)
+    - rest/json (currently not implemented -- JSON-B?)
+    - rest/xml (currently not implemented -- JAX-B?)
+    - soap (currently not implemented -- kSoap2? SAAJ/JAX-B?)

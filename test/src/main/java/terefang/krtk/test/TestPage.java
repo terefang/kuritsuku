@@ -25,7 +25,7 @@ import java.util.*;
 /**
  * Created by fredo on 11.04.17.
  */
-@Path("/krtk/")
+@Path(value="/krtk/", applyActionSuffix = true)
 @ResponseTemplate("/template.vhtml")
 public class TestPage implements RequestHandler
 {

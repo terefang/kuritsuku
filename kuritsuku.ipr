@@ -10,6 +10,7 @@
         <module name="adapter-servlet" />
         <module name="adapter-undertow" />
         <module name="core" />
+        <module name="handler-xmlrpc" />
         <module name="kuritsuku-adapter-jdk-http" />
         <module name="kuritsuku-adapter-servlet" />
         <module name="kuritsuku-adapter-simpleframework" />
@@ -28,6 +29,7 @@
     </annotationProcessing>
     <bytecodeTargetLevel>
       <module name="core" target="1.8" />
+      <module name="handler-xmlrpc" target="1.8" />
       <module name="jdk-http" target="1.8" />
       <module name="kuritsuku" target="1.8" />
       <module name="kuritsuku-adapter-jdk-http" target="1.8" />
@@ -74,6 +76,7 @@
     <file url="file://$PROJECT_DIR$/adapter-undertow" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/core" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/handler-jsonrpc" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/handler-xmlrpc" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/provider" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/template-freemarker" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/template-velocity" charset="UTF-8" />
@@ -224,6 +227,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/core/core.iml" filepath="$PROJECT_DIR$/core/core.iml" />
+      <module fileurl="file://$PROJECT_DIR$/handler-xmlrpc/handler-xmlrpc.iml" filepath="$PROJECT_DIR$/handler-xmlrpc/handler-xmlrpc.iml" />
       <module fileurl="file://$PROJECT_DIR$/kuritsuku.iml" filepath="$PROJECT_DIR$/kuritsuku.iml" />
       <module fileurl="file://$PROJECT_DIR$/adapter-jdk-http/kuritsuku-adapter-jdk-http.iml" filepath="$PROJECT_DIR$/adapter-jdk-http/kuritsuku-adapter-jdk-http.iml" />
       <module fileurl="file://$PROJECT_DIR$/adapter-servlet/kuritsuku-adapter-servlet.iml" filepath="$PROJECT_DIR$/adapter-servlet/kuritsuku-adapter-servlet.iml" />
@@ -467,6 +471,17 @@
       </JAVADOC>
       <SOURCES>
         <root url="jar://$MAVEN_REPOSITORY$/org/simpleframework/simple-transport/6.0.1/simple-transport-6.0.1-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="Maven: redstone.xmlrpc:xmlrpc:1.1.1">
+      <CLASSES>
+        <root url="jar://$MAVEN_REPOSITORY$/redstone/xmlrpc/xmlrpc/1.1.1/xmlrpc-1.1.1.jar!/" />
+      </CLASSES>
+      <JAVADOC>
+        <root url="jar://$MAVEN_REPOSITORY$/redstone/xmlrpc/xmlrpc/1.1.1/xmlrpc-1.1.1-javadoc.jar!/" />
+      </JAVADOC>
+      <SOURCES>
+        <root url="jar://$MAVEN_REPOSITORY$/redstone/xmlrpc/xmlrpc/1.1.1/xmlrpc-1.1.1-sources.jar!/" />
       </SOURCES>
     </library>
   </component>

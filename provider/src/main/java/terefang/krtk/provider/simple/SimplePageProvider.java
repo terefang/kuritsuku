@@ -60,7 +60,7 @@ public class SimplePageProvider implements PageProvider
 					public void processMatch(Class<?> aClass)
 					{
 						Path cp = aClass.getAnnotation(Path.class);
-						String path = KrtkUtil.normalizePath(cp, null, null, null, KrtkEnv.getActionSuffix());
+						String path = KrtkUtil.normalizePath(cp, null, null, null, (cp.applyActionSuffix() ? KrtkEnv.getActionSuffix() : null));
 						SimplePageProvider.this.pathToClassList.put(path, aClass);
 						//SimplePageProvider.this.log("found "+aClass.getCanonicalName()+" with path "+path);
 					}
@@ -84,7 +84,8 @@ public class SimplePageProvider implements PageProvider
 				{
 					public void processMatch(Class<?> aClass, Method method)
 					{
-						String path = KrtkUtil.normalizePath(aClass, method, KrtkEnv.getActionSuffix());
+						Path cp = method.getAnnotation(Path.class);
+						String path = KrtkUtil.normalizePath(aClass, method, (cp.applyActionSuffix() ? KrtkEnv.getActionSuffix() : null));
 						SimplePageProvider.this.methodToFunctionList.put(path, method);
 						//SimplePageProvider.this.log("found "+aClass.getCanonicalName()+"#"+method.getName()+" with path "+path);
 					}

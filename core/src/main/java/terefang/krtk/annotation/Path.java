@@ -25,4 +25,5 @@ import java.lang.annotation.*;
 @Documented
 public @interface Path {
 	String value();
+	boolean applyActionSuffix() default true;
 }
