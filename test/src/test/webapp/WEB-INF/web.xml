@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (c) 2017. terefang@gmail.com
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xmlns="http://java.sun.com/xml/ns/javaee"
+         xmlns:web="http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
+         xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
+         id="WebApp_ID" version="3.0">
+
+    <listener>
+        <listener-class></listener-class>
+    </listener>
+
+    <servlet>
+        <servlet-name>krtk</servlet-name>
+        <servlet-class>terefang.krtk.servlet.KrtkServlet</servlet-class>
+        <init-param>
+            <param-name>SimplePageProvider.SCAN_PATH</param-name>
+            <param-value>terefang.krtk.test</param-value>
+        </init-param>
+        <init-param>
+            <param-name>SimplePageProvider.SCAN_VERBOSE</param-name>
+            <param-value>true</param-value>
+        </init-param>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>krtk</servlet-name>
+        <url-pattern>*.do</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>velocity</servlet-name>
+        <servlet-class>org.apache.velocity.tools.view.VelocityViewServlet</servlet-class>
+        <init-param>
+            <param-name>org.apache.velocity.tools.loadDefaults</param-name>
+            <param-value>false</param-value>
+        </init-param>
+        <init-param>
+            <param-name>org.apache.velocity.properties</param-name>
+            <param-value>/WEB-INF/velocity.properties</param-value>
+        </init-param>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>velocity</servlet-name>
+        <url-pattern>*.vm.html</url-pattern>
+        <url-pattern>*.vm</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>velocity-layout</servlet-name>
+        <servlet-class>org.apache.velocity.tools.view.VelocityLayoutServlet</servlet-class>
+        <init-param>
+            <param-name>org.apache.velocity.tools.loadDefaults</param-name>
+            <param-value>false</param-value>
+        </init-param>
+        <init-param>
+            <param-name>org.apache.velocity.properties</param-name>
+            <param-value>/WEB-INF/velocity.properties</param-value>
+        </init-param>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>velocity-layout</servlet-name>
+        <url-pattern>*.vp.html</url-pattern>
+        <url-pattern>*.vp</url-pattern>
+    </servlet-mapping>
+
+    <welcome-file-list>
+        <welcome-file>/krtk/index.do</welcome-file>
+    </welcome-file-list>
+</web-app>
