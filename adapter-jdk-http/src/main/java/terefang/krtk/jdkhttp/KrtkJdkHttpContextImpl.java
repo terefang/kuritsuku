@@ -462,9 +462,27 @@ public class KrtkJdkHttpContextImpl extends RequestContextImpl implements Reques
 			{
 				this.doForward(path);
 			}
+			
+			@Override
+			public void doError(int code, String text)
+			{
+				try
+				{
+					rci.httpExchange.sendResponseHeaders(code, -1);
+				}
+				catch(IOException e)
+				{
+					e.printStackTrace();
+				}
+			}
 		};
 		
 		return rci;
 	}
 	
+	@Override
+	public void doError(int code, String text)
+	{
+		this.actionProvider.doError(code, text);
+	}
 }

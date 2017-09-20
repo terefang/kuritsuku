@@ -15,8 +15,10 @@
  */
 package terefang.krtk;
 
+import com.google.common.base.Strings;
 import terefang.krtk.ResponseAction;
 import terefang.krtk.action.*;
+import terefang.krtk.annotation.CSRF;
 import terefang.krtk.annotation.Path;
 import terefang.krtk.util.KrtkFileTypeDetector;
 
@@ -24,6 +26,7 @@ import java.io.*;
 import java.lang.reflect.Method;
 import java.net.URL;
 import java.nio.charset.Charset;
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -246,6 +249,11 @@ public class KrtkUtil
 		return new FileContentAction().setFile(file).setContentType(contentType).setAttachment(attachment);
 	}
 	
+	public static ResponseAction error(int code, String content)
+	{
+		return ErrorAction.create(code, content);
+	}
+	
 	public static String normalizePath(Class<?> clazz, Method method, String suffix)
 	{
 		Path pathToClass = clazz.getAnnotation(Path.class);
@@ -299,7 +307,10 @@ public class KrtkUtil
 			path = path.substring(0,path.length()-1);
 		}
 
-		if(suffix!=null && !path.endsWith(suffix))
+		if(suffix!=null
+				&& !path.endsWith(suffix)
+				&& (clazz==null || clazz.getAnnotation(Path.class)==null || clazz.getAnnotation(Path.class).applyActionSuffix())
+				&& (method==null || method.getAnnotation(Path.class)==null || method.getAnnotation(Path.class).applyActionSuffix()))
 		{
 			path += suffix;
 		}
@@ -310,4 +321,100 @@ public class KrtkUtil
 	{
 		return normalizePath(path, null,null, null, null);
 	}
+	
+	public static void checkCSRF(Class<?> clazz) throws IllegalAccessException
+	{
+		checkCSRF(clazz.getAnnotation(CSRF.class));
+	}
+	
+	public static void checkCSRF(Method method) throws IllegalAccessException
+	{
+		Class<?> clazz = method.getDeclaringClass();
+		checkCSRF(clazz.getAnnotation(CSRF.class));
+		checkCSRF(method.getAnnotation(CSRF.class));
+	}
+	
+	public static void checkCSRF(CSRF _csrf) throws IllegalAccessException
+	{
+		if(_csrf!=null && _csrf.verifyIncoming())
+		{
+			String token = KrtkEnv.getContext().getRequestHeader(CsrfToken.HTTP_CSRF_HEADER_NAME);
+			if(token==null)
+			{
+				token = KrtkEnv.getContext().getRequestParam(CsrfToken.HTTP_CSRF_PARAMETER_NAME);
+			}
+			
+			if(token==null)
+			{
+				throw new IllegalAccessException("csrf not valid");
+			}
+
+			CsrfToken vtoken = getCsrfToken(token);
+			if(vtoken!=null)
+			{
+				throw new IllegalAccessException("csrf not valid");
+			}
+
+			if(!Strings.isNullOrEmpty(_csrf.value()) && !_csrf.value().equalsIgnoreCase(vtoken.domain))
+			{
+				throw new IllegalAccessException("csrf not valid");
+			}
+			
+			if(vtoken.validTo<System.currentTimeMillis())
+			{
+				throw new IllegalAccessException("csrf not valid");
+			}
+		}
+
+		if(_csrf!=null && _csrf.includeOutgoing())
+		{
+			CsrfToken token = Strings.isNullOrEmpty(_csrf.value()) ? createCsrfToken() : createCsrfToken(_csrf.value());
+			KrtkEnv.getContext().setResponseParam("_csrf", token);
+			KrtkEnv.getContext().setResponseHeader(token.headerName, token.token);
+		}
+	}
+	
+	public static Map<String, CsrfToken> getCsrfTokens()
+	{
+		Map<String, CsrfToken> csrfToken = (Map<String, CsrfToken>) KrtkEnv.getContext().getContextAttribute(CsrfToken.HTTP_CSRF_PARAMETER_NAME);
+		if(csrfToken==null)
+		{
+			csrfToken = new HashMap();
+			KrtkEnv.getContext().setContextAttribute(CsrfToken.HTTP_CSRF_PARAMETER_NAME, csrfToken);
+		}
+		
+		synchronized(csrfToken)
+		{
+			long tm = System.currentTimeMillis();
+			for(CsrfToken t : csrfToken.values())
+			{
+				if(t.validTo<tm)
+				{
+					csrfToken.remove(t.token);
+				}
+			}
+		}
+		
+		return csrfToken;
+	}
+	
+	public static CsrfToken getCsrfToken(String name)
+	{
+		return getCsrfTokens().get(name);
+	}
+	
+	public static CsrfToken createCsrfToken()
+	{
+		CsrfToken t = CsrfToken.create();
+		getCsrfTokens().put(t.token, t);
+		return t;
+	}
+
+	public static CsrfToken createCsrfToken(String domain)
+	{
+		CsrfToken t = CsrfToken.create(domain);
+		getCsrfTokens().put(t.token, t);
+		return t;
+	}
+	
 }

@@ -13,25 +13,26 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package terefang.krtk.provider;
+package terefang.krtk.action;
 
-import terefang.krtk.ResponseAction;
+import terefang.krtk.provider.ActionProvider;
 
-/**
- * Created by fredo on 15.04.17.
- */
-public interface ActionProvider
+public class ErrorAction extends AbstractResponseAction
 {
-	public default void executeAction(ResponseAction action)
+	private int code;
+	private String text;
+	
+	public static ErrorAction create(int code, String text)
 	{
-		action.executeAction(this);
+		ErrorAction errorAction = new ErrorAction();
+		errorAction.code = code;
+		errorAction.text = text;
+		return errorAction;
 	}
 	
-	public void doRedirect(String url);
-	
-	public void doForward(String path);
-	
-	public void doTemplate(String path);
-	
-	public void doError(int code, String text);
+	@Override
+	public void executeAction(ActionProvider provider)
+	{
+		provider.doError(this.code, this.text);
+	}
 }

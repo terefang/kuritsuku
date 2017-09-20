@@ -391,9 +391,21 @@ public class KrtkSfContextImpl extends RequestContextImpl implements RequestCont
 			{
 				this.doForward(path);
 			}
+			
+			@Override
+			public void doError(int code, String text)
+			{
+				rci.httpResponse.setValue("X-Error", text);
+				rci.httpResponse.setCode(code);
+			}
 		};
 		
 		return rci;
 	}
 	
+	@Override
+	public void doError(int code, String text)
+	{
+		this.actionProvider.doError(code, text);
+	}
 }

@@ -379,8 +379,27 @@ public class ServletRequestContextImpl extends RequestContextImpl implements Req
 			{
 				this.doForward(path);
 			}
+			
+			@Override
+			public void doError(int code, String text)
+			{
+				try
+				{
+					rci.httpServletResponse.sendError(code, text);
+				}
+				catch(IOException e)
+				{
+					e.printStackTrace();
+				}
+			}
 		};
 		
 		return rci;
+	}
+	
+	@Override
+	public void doError(int code, String text)
+	{
+		this.actionProvider.doError(code, text);
 	}
 }

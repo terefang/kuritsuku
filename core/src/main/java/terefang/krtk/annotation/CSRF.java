@@ -13,25 +13,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package terefang.krtk.provider;
+package terefang.krtk.annotation;
 
-import terefang.krtk.ResponseAction;
+import java.lang.annotation.*;
 
-/**
- * Created by fredo on 15.04.17.
- */
-public interface ActionProvider
+@Target({ElementType.TYPE, ElementType.METHOD})
+@Retention(RetentionPolicy.RUNTIME)
+@Documented
+public @interface CSRF
 {
-	public default void executeAction(ResponseAction action)
-	{
-		action.executeAction(this);
-	}
-	
-	public void doRedirect(String url);
-	
-	public void doForward(String path);
-	
-	public void doTemplate(String path);
-	
-	public void doError(int code, String text);
+	String value() default "";
+	boolean verifyIncoming() default false;
+	boolean includeOutgoing() default true;
 }

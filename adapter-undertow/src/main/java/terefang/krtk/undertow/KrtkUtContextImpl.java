@@ -442,9 +442,21 @@ public class KrtkUtContextImpl extends RequestContextImpl implements RequestCont
 			{
 				this.doForward(path);
 			}
+			
+			@Override
+			public void doError(int code, String text)
+			{
+				rci.httpExchange.getResponseHeaders().put(HttpString.tryFromString("X-Error"), text);
+				rci.httpExchange.setStatusCode(code);
+			}
 		};
 		
 		return rci;
 	}
 	
+	@Override
+	public void doError(int code, String text)
+	{
+		this.actionProvider.doError(code, text);
+	}
 }

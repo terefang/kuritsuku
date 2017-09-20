@@ -349,6 +349,12 @@ public class RequestContextImpl implements RequestContext
 		this.actionProvider.doTemplate(path);
 	}
 	
+	@Override
+	public void doError(int code, String text)
+	{
+		this.actionProvider.doError(code, text);
+	}
+	
 	static void executeAction(ResponseAction responseAction, Class<?> clazz, Object object, Method method) throws Exception
 	{
 		if(responseAction!=null)
@@ -679,13 +685,26 @@ public class RequestContextImpl implements RequestContext
 				if(method != null)
 				{
 					Class clazz = method.getDeclaringClass();
+					KrtkUtil.checkCSRF(method);
 					return this.tryInvoke(pp, path, clazz, method);
 				}
 				Class clazz = pp.resolveInvokableClass(path);
 				if(clazz != null)
 				{
+					KrtkUtil.checkCSRF(clazz);
 					return this.tryInvoke(pp, path, clazz);
 				}
+			}
+		}
+		catch(IllegalAccessException iae)
+		{
+			try
+			{
+				executeAction(KrtkUtil.error(KrtkUtil.STATUS_UNAUTHORIZED, iae.getMessage()), null, null, null);
+			}
+			catch(Exception e)
+			{
+				KrtkEnv.getContext().log(e);
 			}
 		}
 		catch(Throwable e)
